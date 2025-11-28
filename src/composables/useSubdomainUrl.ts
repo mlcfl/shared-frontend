@@ -1,4 +1,4 @@
-import { computed } from 'vue';
+import { computed } from "vue";
 
 /**
  * Generates a computed URL for a given subdomain and optional path.
@@ -9,6 +9,11 @@ import { computed } from 'vue';
  */
 export const useSubdomainUrl = (subdomain: string, path: string = "") => {
 	return computed(() => {
+		// For SSR or SSG environments where window is not defined
+		if (!window?.location) {
+			return "";
+		}
+
 		const { protocol, hostname, port } = window.location;
 		const index = hostname.endsWith("localhost") ? -1 : -2;
 		const host = hostname.split(".").slice(index).join(".");
